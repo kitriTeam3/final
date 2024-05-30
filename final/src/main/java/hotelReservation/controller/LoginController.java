@@ -47,7 +47,7 @@ public class LoginController {
 			session.setAttribute("cid", cid);
 			session.setAttribute("cpw", cpw);
 			mv.addObject("msg", cname);
-			mv.setViewName("login/csuccess");
+			mv.setViewName("main/main");
 			
 		}
 		else {
@@ -239,7 +239,7 @@ public class LoginController {
 		CustomerLogin cl = new CustomerLogin(cid, cpw);
 		String cname = loginSvc.cLogin(cl);
 		model.addAttribute("msg", cname);
-		return "login/csuccess";
+		return "main/main";
 	}
 		
 	// 고객 정보 조회 후 확인 버튼 누르면 나오는 페이지
@@ -250,7 +250,7 @@ public class LoginController {
 		EmpLogin el = new EmpLogin(eid, epw);
 		String ename = loginSvc.eLogin(el);
 		model.addAttribute("msg", ename);
-		return "login/esuccess";
+		return "main/main";
 	}
 		
 	// 호텔 로그인 성공 했을 때 페이지
@@ -261,7 +261,7 @@ public class LoginController {
 		HotelLogin hl = new HotelLogin(hid, hpw);
 		String hname = loginSvc.hLogin(hl);
 		model.addAttribute("msg", hname);
-		return "login/hsuccess";
+		return "main/main";
 	}
 	
 	// 고객 정보 조회
@@ -295,7 +295,7 @@ public class LoginController {
 	@RequestMapping(value="/logout")
 	public String logoutctrl(Model model, HttpSession session) {
 		session.invalidate();
-		return "login/loginform";
+		return "redirect:/homePage";
 	}
 	
 	@RequestMapping(value="/updatecustomer")
