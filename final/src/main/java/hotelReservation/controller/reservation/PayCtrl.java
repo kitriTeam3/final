@@ -57,7 +57,7 @@ public class PayCtrl {
 			// 가격 정보 넘기기
 			else {
 				System.out.println("PW 확인 완료");
-				session = req.getSession();
+				session = req.getSession(false);
 	
 				//세션으로 예약정보 객체가져오기
 				Reserve reserve = (Reserve)session.getAttribute("reserve");
@@ -114,7 +114,7 @@ public class PayCtrl {
 		System.out.println("결제정보 입력 완료");
 
 		//세션으로 예약정보 객체가져오기
-		session = req.getSession();
+		session = req.getSession(false);
 		Reserve reserve = (Reserve)session.getAttribute("reserve");
 		reserve.setPid(pid);
 		

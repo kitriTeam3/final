@@ -38,7 +38,7 @@ public class ReserveCtrl {
 		
 
 		// 세션에 저장된 고객아이디 가져오기
-		session = req.getSession();
+		session = req.getSession(false);
 		String cid = (String) session.getAttribute("cid");
 		System.out.println("고객 아이디 확인");
 		System.out.println(cid);
@@ -84,7 +84,7 @@ public class ReserveCtrl {
 			String rid = reserveSvc.createRid(cr);
 
 			//세션으로 예약정보 값 저장
-			session = req.getSession();
+			session = req.getSession(false);
 			session.setAttribute("rid", rid);
 			System.out.println("rid 생성완료");
 			// 세션정보값 가져오기	
@@ -115,7 +115,7 @@ public class ReserveCtrl {
 		} 
 		// 이메일 재확인 불일치
 		else {
-			session = req.getSession();
+			session = req.getSession(false);
 			String cid = (String) session.getAttribute("cid");
 			CustomerInfo cInfo = reserveSvc.customerInfo(cid);
 			System.out.println("고객 정보 확인");
@@ -148,7 +148,7 @@ public class ReserveCtrl {
 			String rid = reserveSvc.createRid(cr);
 
 			//세션으로 예약정보 값 저장
-			session = req.getSession();
+			session = req.getSession(false);
 			session.setAttribute("rid", rid);
 			System.out.println("rid 생성완료");
 			// 세션정보값 가져오기	
@@ -224,6 +224,7 @@ public class ReserveCtrl {
 					
 					System.out.println("결제취소 완료");
 					// 취소완료된 예약내역 재전송
+					session = req.getSession(false);
 					String cid = (String) session.getAttribute("cid");
 					List<MyReserve> myReservation = reserveSvc.myReservation(cid);
 					model.addAttribute("List", myReservation);
