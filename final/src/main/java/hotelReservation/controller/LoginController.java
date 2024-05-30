@@ -2,6 +2,7 @@ package hotelReservation.controller;
 
 
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,17 +60,19 @@ public class LoginController {
 	// 사원 로그인 컨트롤
 	@RequestMapping(value = "/eloginctrl", method = RequestMethod.POST)
 	public ModelAndView eLoginCtrl(@RequestParam("eid") String eid,
-			@RequestParam("epw") String epw, HttpSession session) {
+			@RequestParam("epw") String epw, HttpServletRequest request) {
 		System.out.println(eid + ":" + epw);
 		EmpLogin el = new EmpLogin(eid, epw);
 		String ename = loginSvc.eLogin(el);
 		System.out.println(ename);
 		ModelAndView mv = new ModelAndView();
+		
 		if(ename != null) {
+			HttpSession session = request.getSession();
 			session.setAttribute("eid", eid);
 			session.setAttribute("epw", epw);
 			mv.addObject("msg", ename);
-			mv.setViewName("login/esuccess");
+			mv.setViewName("main/main");
 			
 		}
 		else {
@@ -91,7 +94,7 @@ public class LoginController {
 			session.setAttribute("hid", hid);
 			session.setAttribute("hpw", hpw);
 			mv.addObject("msg", hname);
-			mv.setViewName("login/hsuccess");
+			mv.setViewName("main/main");
 			
 		}
 		else {
@@ -253,7 +256,7 @@ public class LoginController {
 		return "main/main";
 	}
 		
-	// 호텔 로그인 성공 했을 때 페이지
+	// 호텔 정보 조회 후 확인 버튼 누르면 나오는 페이지
 	@RequestMapping(value = "/hsuccess")
 	public String requestHsuccessPage(HttpSession session, Model model) {
 		String hid = (String)session.getAttribute("hid");
@@ -264,32 +267,30 @@ public class LoginController {
 		return "main/main";
 	}
 	
-	// 고객 정보 조회
-	@RequestMapping(value="/cmyinfoctrl")
-	public String cmyinfoctrl(Model model, HttpSession session) {
-		
-		String cid = (String)session.getAttribute("cid");
-		model.addAttribute("cmyinfo", loginSvc.cMyinfo(cid));
-		return "login/cmyinfoform";
-	}
-	
-	// 사원 정보 조회 
-	@RequestMapping(value="/emyinfoctrl")
-	public String emyinfoctrl(Model model, HttpSession session) {
-		
-		String eid = (String)session.getAttribute("eid");
-		model.addAttribute("emyinfo", loginSvc.eMyinfo(eid));
-		return "login/emyinfoform";
-	}
-	
-	// 호텔 정보 조회 
-	@RequestMapping(value="/hmyinfoctrl")
-	public String hmyinfoctrl(Model model, HttpSession session) {
-		
-		String hid = (String)session.getAttribute("hid");
-		model.addAttribute("hmyinfo", loginSvc.hMyinfo(hid));
-		return "login/hmyinfoform";
-	}
+		// 마이페이지 조회
+		@RequestMapping(value="/myinfoctrl")
+		public String myinfoctrl(Model model, HttpSession session) {
+			String cid = (String)session.getAttribute("cid");
+			String eid = (String)session.getAttribute("eid");
+			String hid = (String)session.getAttribute("hid");
+			if(cid != null) {
+				model.addAttribute("cmyinfo", loginSvc.cMyinfo(cid));
+				return "login/cmyinfoform";
+			}
+			else if(eid != null) {
+				model.addAttribute("emyinfo", loginSvc.eMyinfo(eid));
+				return "login/emyinfoform";
+			}
+			else if(hid != null) {
+				model.addAttribute("hmyinfo", loginSvc.hMyinfo(hid));
+				return "login/hmyinfoform";
+			}
+			else {
+				return "redirect:/login";
+			}
+				
+			
+		}
 	
 	// 로그아웃
 	@RequestMapping(value="/logout")

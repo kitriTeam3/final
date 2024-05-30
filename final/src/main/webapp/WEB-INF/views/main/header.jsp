@@ -51,7 +51,7 @@
 				    <c:if test="${not empty sessionScope.eid}">
 				        <a href="#">관리자페이지</a>
 				    </c:if>
-                    <a href="#">마이페이지</a>
+                    <a href="/projects/myinfoctrl">마이페이지</a>
                     <a href="<c:url value='/logout' />"  class="logout-link">로그아웃</a>
                 </c:when>
                 <c:otherwise>
